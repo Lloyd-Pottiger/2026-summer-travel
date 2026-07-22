@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🚗 2026 西南自驾 — 广西→贵州→滇西北 | 7.24-8.12</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 /* ===== RESET ===== */
@@ -55,18 +54,19 @@ body::before{
 .route-flow .arr{font-family:"Caveat",cursive;font-size:1.1rem;color:var(--muted);margin:0 2px}
 .route-flow .train{font-size:.8rem;color:#6366f1;font-weight:700;margin:0 4px}
 
-/* ===== MAP ===== */
-.map-wrap{background:#fff;border:1.5px solid var(--ink);border-radius:24px 8px 24px 8px/8px 24px 8px 24px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:40px;position:relative}
-.map-wrap .tag{position:absolute;top:10px;left:14px;z-index:1000;background:var(--y);border:1.5px solid var(--ink);padding:5px 12px;border-radius:255px 15px 225px 15px/15px 225px 15px 255px;font-family:"Caveat",cursive;font-size:.9rem;font-weight:600;transform:rotate(-1.5deg);box-shadow:2px 2px 0 rgba(0,0,0,.06)}
-#map{height:500px;width:100%}
-.leaflet-popup-content-wrapper{border-radius:16px 6px 16px 6px!important;border:1.5px solid var(--ink)!important;box-shadow:3px 3px 0 rgba(0,0,0,.08)!important;font-family:"Ma Shan Zheng",cursive!important}
-.leaflet-popup-content{font-size:.95rem!important;margin:8px 12px!important}
-.map-legend{position:absolute;bottom:16px;right:14px;z-index:1000;background:#fff;border:1.5px solid var(--ink);border-radius:12px 4px 12px 4px;padding:8px 12px;font-size:.78rem;box-shadow:var(--shadow)}
-.map-legend .li{display:flex;align-items:center;gap:6px;margin:3px 0;font-family:"Caveat",cursive}
-.map-legend .sw{width:20px;height:3px;border-radius:2px}
-.map-legend .sw.drive{background:#e8734a}
-.map-legend .sw.train{background:#6366f1;border-top:2px dashed #6366f1;height:0}
-.map-legend .sw.fly{background:#22c55e;border-top:2px dotted #22c55e;height:0}
+/* ===== ROUTE DIAGRAM (SVG) ===== */
+.route-diagram{background:#fff;border:1.5px solid var(--ink);border-radius:24px 8px 24px 8px/8px 24px 8px 24px;box-shadow:var(--shadow);overflow-x:auto;margin-bottom:40px;position:relative}
+.route-diagram svg{display:block;width:100%;min-width:560px;height:auto}
+.route-diagram .tag{position:absolute;top:10px;left:14px;z-index:2;background:var(--y);border:1.5px solid var(--ink);padding:5px 12px;border-radius:255px 15px 225px 15px/15px 225px 15px 255px;font-family:"Caveat",cursive;font-size:.9rem;font-weight:600;transform:rotate(-1.5deg);box-shadow:2px 2px 0 rgba(0,0,0,.06)}
+.route-diagram .legend{position:absolute;bottom:12px;right:14px;z-index:2;background:#fff;border:1.5px solid var(--ink);border-radius:12px 4px 12px 4px;padding:8px 12px;font-size:.78rem;box-shadow:var(--shadow)}
+.route-diagram .legend .li{display:flex;align-items:center;gap:6px;margin:3px 0;font-family:"Caveat",cursive}
+.route-diagram .legend .sw{width:20px;height:3px;border-radius:2px}
+.route-diagram .legend .sw.drive{background:#e8734a}
+.route-diagram .legend .sw.train{background:#6366f1;border-top:2px dashed #6366f1;height:0}
+.route-diagram .legend .sw.fly{background:#22c55e;border-top:2px dotted #22c55e;height:0}
+/* SVG node hover */
+.route-diagram a.node-hover:hover{cursor:pointer;opacity:.8;transition:opacity .2s}
+
 
 /* ===== SECTION HEADER ===== */
 .sec-hd{display:flex;align-items:center;gap:14px;margin:44px 0 24px}
@@ -126,9 +126,9 @@ body::before{
 @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.2)}30%{transform:scale(1)}45%{transform:scale(1.1)}}
 
 /* ===== RESPONSIVE ===== */
-@media(max-width:768px){.cards,.prep-grid{grid-template-columns:1fr}#map{height:340px}.sec-hd .num{width:44px;height:44px;font-size:2rem}}
+@media(max-width:768px){.cards,.prep-grid{grid-template-columns:1fr}.sec-hd .num{width:44px;height:44px;font-size:2rem}.route-diagram svg{min-width:440px}}
 @media(max-width:480px){.container{padding:10px}.header{padding:30px 10px 16px}.card{padding:14px 16px}.card-day{font-size:1.4rem}}
-@media print{body{background:#fff}.card,.prep-card{break-inside:avoid;box-shadow:none}#map{height:380px}}
+@media print{body{background:#fff}.card,.prep-card{break-inside:avoid;box-shadow:none}}
 </style>
 </head>
 <body>
@@ -182,14 +182,233 @@ body::before{
 </div>
 
 <!-- ===== MAP ===== -->
-<div class="map-wrap" id="map-wrap">
-  <div class="tag">✏️ 路线总览</div>
-  <div id="map"></div>
-  <div class="map-legend">
+<div class="route-diagram" id="map-wrap">
+  <div class="tag">✏️ 路线总览 · 点击节点跳转详情</div>
+  <div class="legend">
     <div class="li"><span class="sw drive"></span> 自驾</div>
     <div class="li"><span class="sw train"></span> 高铁</div>
     <div class="li"><span class="sw fly"></span> 航班</div>
   </div>
+  <svg viewBox="0 0 620 860" xmlns="http://www.w3.org/2000/svg">
+
+    <defs>
+      <filter id="sketch">
+        <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="2" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+
+    <!-- ===== SECTION BACKGROUNDS ===== -->
+    <rect x="15" y="22" width="590" height="210" rx="14" fill="#f0faf4" opacity=".5"/>
+    <text x="575" y="40" font-family="Caveat,cursive" font-size="13" fill="#7b8a9b" text-anchor="end">广西段 🚗桂林取还</text>
+
+    <rect x="15" y="252" width="590" height="260" rx="14" fill="#fff7ed" opacity=".35"/>
+    <text x="575" y="270" font-family="Caveat,cursive" font-size="13" fill="#7b8a9b" text-anchor="end">贵州段 🚗贵阳取→昆明还</text>
+
+    <rect x="15" y="532" width="590" height="310" rx="14" fill="#f7f2ff" opacity=".3"/>
+    <text x="575" y="550" font-family="Caveat,cursive" font-size="13" fill="#7b8a9b" text-anchor="end">滇西北段 🚗丽江取还</text>
+
+    <!-- ===== CONNECTING LINES ===== -->
+    <g fill="none" stroke="#2c3e50" stroke-width="2.5" stroke-linecap="round">
+      <!-- 阳朔→龙脊 (drive) -->
+      <path d="M 150 105 Q 155 130, 150 150"/>
+      <!-- 龙脊→桂林 (drive) -->
+      <path d="M 150 165 Q 155 190, 150 215"/>
+    </g>
+
+    <!-- Guilin→Guiyang train (dashed) -->
+    <g fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="8,6">
+      <path d="M 150 230 Q 155 260, 150 290"/>
+    </g>
+
+    <!-- Guiyang→Huangguoshu→Wanfenglin→Luoping→Kunming (drives) -->
+    <g fill="none" stroke="#2c3e50" stroke-width="2.5" stroke-linecap="round">
+      <path d="M 150 305 Q 155 330, 150 350"/>
+      <path d="M 150 365 Q 155 390, 150 410"/>
+      <path d="M 150 425 Q 155 450, 150 470"/>
+      <path d="M 150 485 Q 155 510, 150 530"/>
+    </g>
+
+    <!-- Kunming→Lijiang train (dashed) -->
+    <g fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="8,6">
+      <path d="M 150 545 Q 155 575, 150 600"/>
+    </g>
+
+    <!-- Lijiang hub lines -->
+    <g fill="none" stroke="#2c3e50" stroke-width="2.5" stroke-linecap="round">
+      <!-- Lijiang→Lugu Lake (side branch) -->
+      <path d="M 150 630 Q 200 640, 260 650 Q 320 660, 390 655"/>
+      <!-- Lugu Lake→back (return) -->
+      <path d="M 390 675 Q 320 670, 260 680 Q 200 690, 150 685"/>
+      <!-- Lijiang→Tiger Leaping Gorge -->
+      <path d="M 150 700 Q 155 720, 150 735"/>
+      <!-- Tiger Leaping Gorge→Shangri-La -->
+      <path d="M 150 750 Q 155 770, 150 790"/>
+      <!-- Shangri-La→Lijiang return -->
+      <path d="M 150 805 Q 155 825, 150 845"/>
+    </g>
+
+    <!-- Lijiang→Guangzhou flight (dotted) -->
+    <g fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-dasharray="4,8" opacity="0.7">
+      <path d="M 150 860 Q 155 878, 150 890"/>
+    </g>
+
+    <!-- ===== TRANSPORT LABELS ===== -->
+    <g font-family="Caveat,cursive" font-size="12" fill="#7b8a9b">
+      <text x="158" y="128">🚄 2.5h</text>
+      <text x="158" y="188">🚗 3h</text>
+      <text x="158" y="258">🚗 1.5h</text>
+      <text x="158" y="308">🚄 2h</text>
+      <text x="158" y="368">🚗 2h</text>
+      <text x="158" y="428">🚗 3h</text>
+      <text x="158" y="488">🚗 1.5h</text>
+      <text x="158" y="548">🚗 3h</text>
+      <text x="158" y="608">🚄 3.5h</text>
+      <text x="280" y="648">🚗 4-5h ⇄</text>
+      <text x="158" y="718">🚗 1.5h</text>
+      <text x="158" y="778">🚗 2h</text>
+      <text x="158" y="838">🚗 3.5h</text>
+      <text x="158" y="880">✈️ 2h10min</text>
+    </g>
+
+    <!-- ===== NODES ===== -->
+    <!-- Node template: circle(r=15) + emoji + name + nights badge -->
+
+    <!-- 广州 (start) -->
+    <a class="node-hover" href="#s1">
+      <circle cx="150" cy="55" r="15" fill="#fffbe6" stroke="#2c3e50" stroke-width="2"/>
+      <text x="150" y="60" text-anchor="middle" font-size="15">🏠</text>
+      <text x="175" y="55" font-family="Ma Shan Zheng,cursive" font-size="15" fill="#2c3e50">广州</text>
+      <text x="175" y="70" font-family="Caveat,cursive" font-size="11" fill="#7b8a9b">出发</text>
+    </a>
+
+    <!-- 阳朔 D1-2 -->
+    <a class="node-hover" href="#s1">
+      <circle cx="150" cy="120" r="16" fill="#f0faf4" stroke="#2c3e50" stroke-width="2"/>
+      <text x="150" y="125" text-anchor="middle" font-size="15">🏞️</text>
+      <text x="175" y="118" font-family="Ma Shan Zheng,cursive" font-size="15" fill="#2c3e50">阳朔</text>
+      <rect x="215" y="123" width="34" height="16" rx="6" fill="#fff" stroke="#2c3e50" stroke-width="1"/>
+      <text x="232" y="135" text-anchor="middle" font-family="Caveat,cursive" font-size="10" fill="#2c3e50">D1-2</text>
+    </a>
+
+    <!-- 龙脊 D3 -->
+    <a class="node-hover" href="#s1">
+      <circle cx="150" cy="175" r="15" fill="#f0faf4" stroke="#2c3e50" stroke-width="2"/>
+      <text x="150" y="180" text-anchor="middle" font-size="14">🌾</text>
+      <text x="175" y="173" font-family="Ma Shan Zheng,cursive" font-size="15" fill="#2c3e50">龙脊梯田</text>
+      <rect x="255" y="178" width="26" height="16" rx="6" fill="#fff" stroke="#2c3e50" stroke-width="1"/>
+      <text x="268" y="190" text-anchor="middle" font-family="Caveat,cursive" font-size="10" fill="#2c3e50">D3</text>
+    </a>
+
+    <!-- 桂林 (transit) -->
+    <a class="node-hover" href="#s1">
+      <circle cx="150" cy="230" r="14" fill="#fff" stroke="#6366f1" stroke-width="2" stroke-dasharray="3,2"/>
+      <text x="150" y="235" text-anchor="middle" font-size="13">🚄</text>
+      <text x="175" y="233" font-family="Ma Shan Zheng,cursive" font-size="14" fill="#6366f1">桂林（中转）</text>
+    </a>
+
+    <!-- 贵阳 (transit) -->
+    <a class="node-hover" href="#s2">
+      <circle cx="150" cy="290" r="14" fill="#fff" stroke="#6366f1" stroke-width="2" stroke-dasharray="3,2"/>
+      <text x="150" y="295" text-anchor="middle" font-size="13">🚄</text>
+      <text x="175" y="293" font-family="Ma Shan Zheng,cursive" font-size="14" fill="#6366f1">贵阳（取车）</text>
+    </a>
+
+    <!-- 黄果树 D5 -->
+    <a class="node-hover" href="#s2">
+      <circle cx="150" cy="345" r="15" fill="#fff7ed" stroke="#2c3e50" stroke-width="2"/>
+      <text x="150" y="350" text-anchor="middle" font-size="14">🌊</text>
+      <text x="175" y="343" font-family="Ma Shan Zheng,cursive" font-size="15" fill="#2c3e50">黄果树瀑布</text>
+      <rect x="255" y="348" width="26" height="16" rx="6" fill="#fff" stroke="#2c3e50" stroke-width="1"/>
+      <text x="268" y="360" text-anchor="middle" font-family="Caveat,cursive" font-size="10" fill="#2c3e50">D5</text>
+    </a>
+
+    <!-- 万峰林 D6 -->
+    <a class="node-hover" href="#s2">
+      <circle cx="150" cy="405" r="15" fill="#fff7ed" stroke="#2c3e50" stroke-width="2"/>
+      <text x="150" y="410" text-anchor="middle" font-size="14">⛰️</text>
+      <text x="175" y="403" font-family="Ma Shan Zheng,cursive" font-size="15" fill="#2c3e50">万峰林</text>
+      <rect x="235" y="408" width="26" height="16" rx="6" fill="#fff" stroke="#2c3e50" stroke-width="1"/>
+      <text x="248" y="420" text-anchor="middle" font-family="Caveat,cursive" font-size="10" fill="#2c3e50">D6</text>
+    </a>
+
+    <!-- 罗平 D7 -->
+    <a class="node-hover" href="#s2">
+      <circle cx="150" cy="465" r="14" fill="#fff7ed" stroke="#2c3e50" stroke-width="2"/>
+      <text x="150" y="470" text-anchor="middle" font-size="13">💧</text>
+      <text x="175" y="463" font-family="Ma Shan Zheng,cursive" font-size="15" fill="#2c3e50">罗平</text>
+      <rect x="215" y="468" width="26" height="16" rx="6" fill="#fff" stroke="#2c3e50" stroke-width="1"/>
+      <text x="228" y="480" text-anchor="middle" font-family="Caveat,cursive" font-size="10" fill="#2c3e50">D7</text>
+    </a>
+
+    <!-- 昆明 D8-9 -->
+    <a class="node-hover" href="#s3">
+      <circle cx="150" cy="525" r="16" fill="#fff0f3" stroke="#2c3e50" stroke-width="2"/>
+      <text x="150" y="530" text-anchor="middle" font-size="15">🌸</text>
+      <text x="175" y="523" font-family="Ma Shan Zheng,cursive" font-size="15" fill="#2c3e50">昆明</text>
+      <rect x="215" y="528" width="34" height="16" rx="6" fill="#fff" stroke="#2c3e50" stroke-width="1"/>
+      <text x="232" y="540" text-anchor="middle" font-family="Caveat,cursive" font-size="10" fill="#2c3e50">D8-9</text>
+      <text x="255" y="540" font-size="11" fill="#7b8a9b">· 休整</text>
+    </a>
+
+    <!-- 丽江 D10-11 (hub) -->
+    <a class="node-hover" href="#s3">
+      <circle cx="150" cy="600" r="17" fill="#f7f2ff" stroke="#2c3e50" stroke-width="2.5"/>
+      <text x="150" y="605" text-anchor="middle" font-size="16">🏔️</text>
+      <text x="175" y="598" font-family="Ma Shan Zheng,cursive" font-size="16" fill="#2c3e50" font-weight="bold">丽江</text>
+      <rect x="215" y="603" width="52" height="16" rx="6" fill="#fffbe6" stroke="#2c3e50" stroke-width="1"/>
+      <text x="241" y="615" text-anchor="middle" font-family="Caveat,cursive" font-size="10" fill="#2c3e50">D10-11</text>
+      <text x="272" y="615" font-size="10" fill="#7b8a9b">取车·圆心</text>
+    </a>
+
+    <!-- 泸沽湖 D12-13 (side branch) -->
+    <a class="node-hover" href="#s3">
+      <circle cx="395" cy="655" r="16" fill="#eef6ff" stroke="#2c3e50" stroke-width="2"/>
+      <text x="395" y="660" text-anchor="middle" font-size="15">💙</text>
+      <text x="418" y="653" font-family="Ma Shan Zheng,cursive" font-size="15" fill="#2c3e50">泸沽湖</text>
+      <rect x="478" y="658" width="34" height="16" rx="6" fill="#fff" stroke="#2c3e50" stroke-width="1"/>
+      <text x="495" y="670" text-anchor="middle" font-family="Caveat,cursive" font-size="10" fill="#2c3e50">D12-13</text>
+    </a>
+
+    <!-- return dot for Lugu Lake branch -->
+    <circle cx="150" cy="685" r="5" fill="#2c3e50" opacity=".5"/>
+
+    <!-- 虎跳峡 (daytrip) -->
+    <a class="node-hover" href="#s3">
+      <circle cx="150" cy="740" r="14" fill="#fff" stroke="#2c3e50" stroke-width="2" stroke-dasharray="3,2"/>
+      <text x="150" y="745" text-anchor="middle" font-size="13">🥾</text>
+      <text x="175" y="738" font-family="Ma Shan Zheng,cursive" font-size="14" fill="#2c3e50">虎跳峡</text>
+      <text x="235" y="738" font-size="11" fill="#7b8a9b">当日徒步</text>
+    </a>
+
+    <!-- 香格里拉 D16-18 -->
+    <a class="node-hover" href="#s3">
+      <circle cx="150" cy="795" r="16" fill="#f7f2ff" stroke="#2c3e50" stroke-width="2.5"/>
+      <text x="150" y="800" text-anchor="middle" font-size="15">🏞️</text>
+      <text x="175" y="793" font-family="Ma Shan Zheng,cursive" font-size="16" fill="#2c3e50" font-weight="bold">香格里拉</text>
+      <rect x="270" y="798" width="34" height="16" rx="6" fill="#fffbe6" stroke="#2c3e50" stroke-width="1"/>
+      <text x="287" y="810" text-anchor="middle" font-family="Caveat,cursive" font-size="10" fill="#2c3e50">D16-18</text>
+      <text x="310" y="810" font-size="10" fill="#7b8a9b">3晚</text>
+    </a>
+
+    <!-- 丽江 D19 (return) -->
+    <a class="node-hover" href="#s3">
+      <circle cx="150" cy="855" r="14" fill="#f7f2ff" stroke="#2c3e50" stroke-width="2"/>
+      <text x="150" y="860" text-anchor="middle" font-size="13">🏔️</text>
+      <text x="175" y="853" font-family="Ma Shan Zheng,cursive" font-size="14" fill="#2c3e50">丽江（还车）</text>
+      <rect x="275" y="858" width="26" height="16" rx="6" fill="#fff" stroke="#2c3e50" stroke-width="1"/>
+      <text x="288" y="870" text-anchor="middle" font-family="Caveat,cursive" font-size="10" fill="#2c3e50">D19</text>
+    </a>
+
+    <!-- 广州 (end) -->
+    <a class="node-hover" href="#s3">
+      <circle cx="150" cy="895" r="15" fill="#fffbe6" stroke="#22c55e" stroke-width="2"/>
+      <text x="150" y="900" text-anchor="middle" font-size="14">🏠</text>
+      <text x="175" y="896" font-family="Ma Shan Zheng,cursive" font-size="15" fill="#2c3e50">广州</text>
+      <text x="215" y="896" font-size="11" fill="#22c55e">到家 ✈️</text>
+    </a>
+
+  </svg>
 </div>
 
 <!-- ============ SECTION 1: 广西 ============ -->
@@ -639,111 +858,5 @@ body::before{
 </footer>
 
 </div><!-- /.container -->
-
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-const map = L.map('map', { center: [26.5, 103], zoom: 7, scrollWheelZoom: true });
-
-// 高德地图瓦片
-L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
-  subdomains: ['1','2','3','4'],
-  attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
-  maxZoom: 18,
-}).addTo(map);
-
-// Driving routes
-const drive = [
-  [[24.778,110.497],[25.760,110.120],'阳朔→龙脊'],
-  [[25.760,110.120],[25.274,110.290],'龙脊→桂林'],
-  [[26.647,106.630],[25.992,105.666],'贵阳→黄果树'],
-  [[25.992,105.666],[25.014,104.926],'黄果树→万峰林'],
-  [[25.014,104.926],[24.885,104.309],'万峰林→罗平'],
-  [[24.885,104.309],[25.039,102.703],'罗平→昆明'],
-  [[26.872,100.230],[27.660,100.780],'丽江→泸沽湖'],
-  [[27.660,100.780],[26.872,100.230],'泸沽湖→丽江'],
-  [[26.872,100.230],[27.220,100.130],'丽江→虎跳峡'],
-  [[27.220,100.130],[27.830,99.700],'虎跳峡→香格里拉'],
-  [[27.830,99.700],[26.872,100.230],'香格里拉→丽江'],
-];
-drive.forEach(d => {
-  L.polyline([d[0], d[1]], { color: '#e8734a', weight: 3.5, opacity: 0.85, smoothFactor: 1 })
-    .addTo(map).bindPopup(`<strong>🚗 ${d[2]}</strong>`);
-});
-
-// Train routes
-const trains = [
-  [[23.129,113.264],[24.778,110.497],'广州南→阳朔 🚄'],
-  [[25.274,110.290],[26.647,106.630],'桂林→贵阳 🚄'],
-  [[25.039,102.703],[26.872,100.230],'昆明→丽江 🚄'],
-];
-trains.forEach(t => {
-  L.polyline([t[0], t[1]], { color: '#6366f1', weight: 2.5, opacity: 0.65, smoothFactor: 1, dashArray: '10,8' })
-    .addTo(map).bindPopup(`<strong>${t[2]}</strong>`);
-});
-
-// Flight
-L.polyline([[26.872,100.230],[23.129,113.264]], { color: '#22c55e', weight: 2, opacity: 0.5, smoothFactor: 1, dashArray: '4,10' })
-  .addTo(map).bindPopup('<strong>丽江→广州 ✈️</strong>');
-
-// Stops
-const stops = [
-  {lat:23.129,lng:113.264, name:'广州', icon:'🏠', type:'start'},
-  {lat:24.778,lng:110.497, name:'阳朔', icon:'🏞️', type:'stay', n:'D1-D2'},
-  {lat:25.760,lng:110.120, name:'龙脊梯田', icon:'🌾', type:'stay', n:'D3'},
-  {lat:25.274,lng:110.290, name:'桂林', icon:'🚄', type:'transit'},
-  {lat:26.647,lng:106.630, name:'贵阳', icon:'🚄', type:'transit'},
-  {lat:25.992,lng:105.666, name:'黄果树', icon:'🌊', type:'stay', n:'D5'},
-  {lat:25.014,lng:104.926, name:'万峰林', icon:'⛰️', type:'stay', n:'D6'},
-  {lat:24.885,lng:104.309, name:'罗平', icon:'💧', type:'stay', n:'D7'},
-  {lat:25.039,lng:102.703, name:'昆明', icon:'🌸', type:'stay', n:'D8-D9'},
-  {lat:26.872,lng:100.230, name:'丽江', icon:'🏔️', type:'stay', n:'D10-D11,D14-D15'},
-  {lat:27.660,lng:100.780, name:'泸沽湖', icon:'💙', type:'stay', n:'D12-D13'},
-  {lat:27.220,lng:100.130, name:'虎跳峡', icon:'🥾', type:'daytrip'},
-  {lat:27.830,lng:99.700,  name:'香格里拉', icon:'🏞️', type:'stay', n:'D16-D18'},
-];
-
-function makeIcon(emoji, size) {
-  return L.divIcon({
-    html: `<div style="font-size:${size||20}px;text-align:center;line-height:1;filter:drop-shadow(2px 2px 1px rgba(0,0,0,.15))">${emoji}</div>`,
-    iconSize: [size||20, size||20], iconAnchor: [(size||20)/2, (size||20)/2], className: '',
-  });
-}
-stops.forEach(s => {
-  const sz = (s.type==='stay' && s.n) ? 26 : 20;
-  const m = L.marker([s.lat, s.lng], { icon: makeIcon(s.icon, sz) }).addTo(map);
-  let pop = `<strong>${s.icon} ${s.name}</strong>`;
-  if (s.n) pop += `<br><small>📅 ${s.n}</small>`;
-  if (s.type==='transit') pop += '<br><small>🚄 中转站</small>';
-  if (s.type==='start') pop += '<br><small>出发城市</small>';
-  m.bindPopup(pop);
-});
-
-// Labels
-const labels = [
-  {lat:23.129,lng:113.264, name:'广州', dir:'bottom'},
-  {lat:24.778,lng:110.497, name:'阳朔', dir:'right'},
-  {lat:25.760,lng:110.120, name:'龙脊', dir:'top'},
-  {lat:26.647,lng:106.630, name:'贵阳', dir:'top'},
-  {lat:25.992,lng:105.666, name:'黄果树', dir:'right'},
-  {lat:25.014,lng:104.926, name:'万峰林', dir:'bottom'},
-  {lat:25.039,lng:102.703, name:'昆明', dir:'bottom'},
-  {lat:26.872,lng:100.230, name:'丽江', dir:'right'},
-  {lat:27.660,lng:100.780, name:'泸沽湖', dir:'top'},
-  {lat:27.830,lng:99.700,  name:'香格里拉', dir:'top'},
-];
-const off = {top:[0,-22],bottom:[0,22],left:[-44,0],right:[44,0]};
-labels.forEach(s => {
-  const [ox,oy] = off[s.dir];
-  L.marker([s.lat,s.lng], {
-    icon: L.divIcon({
-      html: `<div style="font-family:'Ma Shan Zheng',cursive;font-size:12px;color:#2c3e50;white-space:nowrap;text-shadow:1px 1px 0 white,-1px -1px 0 white,1px -1px 0 white,-1px 1px 0 white;transform:translate(${ox}px,${oy}px);font-weight:bold">${s.name}</div>`,
-      iconSize:[0,0], className:'',
-    }), interactive: false,
-  }).addTo(map);
-});
-
-map.fitBounds(L.latLngBounds(stops.map(s => [s.lat, s.lng])).pad(0.12));
-</script>
 </body>
 </html>
