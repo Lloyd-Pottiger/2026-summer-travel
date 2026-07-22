@@ -214,14 +214,6 @@ body::before{
 .nav a:hover{background:var(--y);transform:rotate(0deg) translateY(-2px);box-shadow:var(--shadow-hover)}
 
 /* ===== PRIORITY LEGEND ===== */
-.priority-note{
-  background:var(--pu);border:1.5px solid var(--ink);
-  border-radius:16px 6px 16px 6px;padding:14px 20px;margin-bottom:32px;
-  box-shadow:var(--shadow);transform:rotate(-.2deg);
-  font-size:.88rem;text-align:center;line-height:2;
-}
-.priority-note .pri-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 4px}
-.priority-note strong{font-size:.95rem}
 
 /* ===== FOOTER ===== */
 .footer{text-align:center;padding:36px 20px;font-family:"Caveat",cursive;font-size:1rem;color:var(--muted)}
@@ -256,7 +248,7 @@ body::before{
   <h1>🚗 2026 西南自驾之旅</h1>
   <div class="line"></div>
   <p class="sub">广州 → 广西 → 贵州 → 滇西北 &nbsp;·&nbsp; 20天 &nbsp;·&nbsp; 7.24 — 8.12</p>
-  <p class="sub" style="font-size:.95rem;margin-top:2px;">两人换着开 · 自然风光+美食 · 优先香格里拉&泸沽湖</p>
+  <p class="sub" style="font-size:.95rem;margin-top:2px;">两人换着开 · 自然风光+美食 · 香格里拉直飞回</p>
 </header>
 
 <!-- ===== NAV ===== -->
@@ -490,13 +482,10 @@ body::before{
   <div class="num">❸</div>
   <div>
     <h2>滇西北 · 大理→丽江→泸沽湖→香格里拉</h2>
-    <span class="sum">8.1 — 8.12 ｜ 🚗 丽江取还 ｜ 优先级：大理 ＜ 丽江 ＜ 泸沽湖 ＜ 香格里拉</span>
+    <span class="sum">8.1 — 8.12 ｜ 🚗 丽江取→迪庆还 ｜ 一车到底，不走回头路</span>
   </div>
 </div>
 
-<div class="priority-note">
-  时间分配原则：<strong>香格里拉</strong>最多 🟣 → <strong>泸沽湖</strong>次之 🔵 → <strong>丽江</strong>作中转+缓冲 🟡 → <strong>大理</strong>只歇一脚 🟢<br>
-  全部以丽江为圆心辐射：西去香格里拉，东去泸沽湖，一车在丽江取还，不走回头长途。
 </div>
 
 <div class="cards">
@@ -523,7 +512,7 @@ body::before{
     <div class="sec"><div class="t">🎯 玩什么</div><div class="c">🚗 上午→大理（全程高速 4h）→ 🏘️ 下午<strong>喜洲古镇</strong>（白族民居+稻田，比古城原生态）→ 🚲 <strong>洱海生态廊道</strong>骑行（S 湾→喜洲段最美）→ 🌅 洱海边日落</div></div>
     <div class="sec"><div class="t">🍜 吃什么</div><div class="c">🥟 喜洲·<strong>破酥粑粑</strong>（甜咸各一，现烤！）· 烤乳扇 · 🐟 酸辣鱼</div></div>
     <div class="sec"><div class="t">🏠 住哪里</div><div class="c">洱海西岸（才村/龙龛码头，早起看日出，不住古城里面）</div></div>
-    <div class="note">🟢 大理优先级最低，只给 1 晚。喜洲比大理古城值得花时间，商业化程度刚好。</div>
+    <div class="note">大理只停 1 晚，刚好。喜洲比大理古城更原生态，稻田+白族民居值得看看。</div>
   </div>
 
   <!-- D11: 8/3 大理→丽江 -->
@@ -551,7 +540,7 @@ body::before{
     <div class="sec"><div class="t">🎯 玩什么</div><div class="c">🚗 早出发→泸沽湖（丽宁公路，全程山路 4-5h）→ 下午到，<strong>里格半岛</strong>观景台 → 🛶 <strong>猪槽船</strong>游湖 → 🌅 里格半岛日落 → 🌙 晚上看星空</div></div>
     <div class="sec"><div class="t">🍜 吃什么</div><div class="c">🐟 泸沽湖·<strong>湖鱼</strong>（现捞现做）· 摩梭琵琶肉 · 🥔 高原土豆</div></div>
     <div class="sec"><div class="t">🏠 住哪里</div><div class="c"><strong>里格半岛 or 大落水村</strong>湖边客栈（推窗就是湖，里格更美但贵一些）</div></div>
-    <div class="note">🔵 泸沽湖优先级第二！8 月初<strong>水性杨花</strong>（海菜花）盛花期，白色小花漂满湖面，是泸沽湖最美的季节。全程山路注意安全。</div>
+    <div class="note">8 月初<strong>水性杨花</strong>（海菜花）盛花期，白色小花漂满湖面，是泸沽湖最美的季节。全程山路注意安全。</div>
   </div>
 
   <!-- D13: 8/5 泸沽湖全天 -->
@@ -587,7 +576,7 @@ body::before{
     <div class="sec"><div class="t">🎯 玩什么</div><div class="c"><strong>Plan A（抢到索道票）：</strong>🏔️ 玉龙雪山冰川大索道+蓝月谷一日游<br><strong>Plan B（没抢到 / 想省钱）：</strong>🌿 <strong>文海</strong>（高山草甸湖泊，野生小众）+ 拉市海后山骑马<br><strong>Plan C：</strong>纯休息，束河咖啡馆发呆</div></div>
     <div class="sec"><div class="t">🍜 吃什么</div><div class="c">🥘 黑山羊火锅 · 🍄 菌子季继续吃</div></div>
     <div class="sec"><div class="t">🏠 住哪里</div><div class="c">继续丽江</div></div>
-    <div class="note">🟡 丽江的定位：泸沽湖和香格里拉之间的缓冲站。今天不赶路，为明天进香格里拉蓄力。大索道票提前 3 天抢。</div>
+    <div class="note">今天不赶路，为明天进香格里拉做准备。大索道票提前 3 天抢。</div>
   </div>
 
   <!-- D16: 8/8 丽江→虎跳峡→香格里拉 -->
@@ -601,7 +590,7 @@ body::before{
     <div class="sec"><div class="t">🎯 玩什么</div><div class="c">🚗 上午→<strong>虎跳峡</strong>（1.5h）→ 🥾 <strong>中虎跳徒步</strong> 2-3h（8 月江水咆哮，最震撼！）→ 🚗 下午→<strong>香格里拉</strong>（2h）→ 🛞 独克宗古城<strong>转经筒</strong>（世界最大）→ 🍖 晚上藏餐</div></div>
     <div class="sec"><div class="t">🍜 吃什么</div><div class="c">🥩 <strong>牦牛肉火锅</strong> · 青稞饼 · 酥油茶 · 糌粑</div></div>
     <div class="sec"><div class="t">🏠 住哪里</div><div class="c">独克宗古城附近（海拔 3300m，第一晚注意高反）</div></div>
-    <div class="note">🟣 进入本次旅行最高优先级——香格里拉！海拔 3300m，第一天不建议洗澡。行动放慢，多喝水，让身体适应。</div>
+    <div class="note">进入香格里拉！海拔 3300m，第一天不建议洗澡。行动放慢，多喝水，让身体适应。</div>
   </div>
 
   <!-- D17: 8/9 香格里拉·普达措 -->
@@ -612,7 +601,7 @@ body::before{
     <div class="sec"><div class="t">🎯 玩什么</div><div class="c">🏞️ <strong>普达措国家公园</strong>全天 → 🌲 <strong>属都湖</strong>环湖徒步（3.3km 木栈道，很轻松）→ 💧 <strong>碧塔海</strong>（更安静的第二湖区，人少很多）→ 🐿️ 沿途松鼠、牦牛随处可见 → 🌙 晚上逛独克宗古城</div></div>
     <div class="sec"><div class="t">🍜 吃什么</div><div class="c">🥛 牦牛酸奶（景区里也有）· 🍲 <strong>松茸炖鸡</strong>（8 月是松茸季！香格里拉是松茸核心产区）</div></div>
     <div class="sec"><div class="t">🏠 住哪里</div><div class="c">继续香格里拉</div></div>
-    <div class="note">🟣 普达措海拔 3500m，早上可能只有 10°C。穿薄羽绒+冲锋衣。属都湖徒步别跑跳，慢慢走享受。这是整个行程最有"人间仙境"感的一天。</div>
+    <div class="note">普达措海拔 3500m，早上可能只有 10°C。穿薄羽绒+冲锋衣。属都湖徒步别跑跳，慢慢走享受。这是整个行程最有"人间仙境"感的一天。</div>
   </div>
 
   <!-- D18: 8/10 香格里拉·松赞林寺+纳帕海 -->
@@ -623,27 +612,27 @@ body::before{
     <div class="sec"><div class="t">🎯 玩什么</div><div class="c">🌅 清晨<strong>松赞林寺</strong>晨雾（对面山坡是最佳拍摄点，不进寺也行）→ 🌊 <strong>纳帕海</strong>环湖自驾（8 月是真正的湖泊！雨季水最多的时候）→ 🐴 纳帕海骑马 → 🌙 独克宗古城最后一晚</div></div>
     <div class="sec"><div class="t">🍜 吃什么</div><div class="c">🥩 再吃一顿牦牛肉火锅 · 🍲 松茸刺身（够新鲜可以生吃！）</div></div>
     <div class="sec"><div class="t">🏠 住哪里</div><div class="c">香格里拉（最后一晚，好好享受）</div></div>
-    <div class="note">🟣 纳帕海环湖路雨季可能被淹，轿车别硬闯水上公路（SUV 可以低速通过）。松赞林寺对面山坡免费且角度最好。</div>
+    <div class="note">纳帕海环湖路雨季可能被淹，轿车别硬闯水上公路（SUV 可以低速通过）。松赞林寺对面山坡免费且角度最好。</div>
   </div>
 
   <!-- D19: 8/11 缓冲日 -->
   <div class="card c-y" style="--r:.3deg">
     <div class="card-top"><div><span class="card-day">Day 19</span><span class="card-date">📅 8月11日 周二</span></div></div>
-    <div class="card-route">📍 香格里拉 → 丽江（180km）or 继续香格里拉</div>
-    <div class="card-info"><span class="tag drive">🚗 3.5h（如果回丽江）</span></div>
-    <div class="sec"><div class="t">🎯 玩什么</div><div class="c"><strong>选项 A：</strong>上午香格里拉最后逛逛 → 🚗 下午回丽江（3.5h），还车<br><strong>选项 B：</strong>香格里拉再多待一天（去白水台 or 巴拉格宗 or 纯发呆），D20 早起赶回丽江还车→机场</div></div>
-    <div class="sec"><div class="t">🍜 吃什么</div><div class="c">选项 A：晚上丽江腊排骨收尾<br>选项 B：香格里拉最后一顿藏餐</div></div>
-    <div class="sec"><div class="t">🏠 住哪里</div><div class="c">丽江 or 香格里拉（看选哪个方案）</div></div>
-    <div class="buffer">💡 缓冲日——如果前面某站遇到下雨/太累往后推了一天，这里就是填坑用的。如果一切顺利，选 B 多享受一天香格里拉。</div>
+    <div class="card-route">📍 香格里拉 · 自由日</div>
+    <div class="card-info"><span class="tag weather">☀️ 晴间多云 10-22°C</span></div>
+    <div class="sec"><div class="t">🎯 玩什么</div><div class="c">😴 最后一天不急不赶 → ☕ 独克宗古城找个咖啡馆晒太阳 → 🛍️ 买松茸干、牦牛肉干带回家 → 可选：<strong>白水台</strong>（"土耳其棉花堡"中国版，当天往返）or 纯发呆</div></div>
+    <div class="sec"><div class="t">🍜 吃什么</div><div class="c">🍲 最后一顿松茸炖鸡 · 🥩 牦牛肉火锅收尾</div></div>
+    <div class="sec"><div class="t">🏠 住哪里</div><div class="c">香格里拉（最后一晚，享受高原夜晚）</div></div>
+    <div class="buffer">💡 缓冲日——如果前面某站下雨/太累往后推了一天，这里就是填坑用的。也可以早起赶去白水台看钙化池。</div>
   </div>
 
   <!-- D20: 8/12 回家 -->
   <div class="card c-p" style="--r:-.3deg">
     <div class="card-top"><div><span class="card-day">Day 20</span><span class="card-date">📅 8月12日 周三</span></div></div>
-    <div class="card-route">📍 丽江三义 → 广州 ✈️</div>
+    <div class="card-route">📍 迪庆香格里拉 → 广州 ✈️</div>
     <div class="card-info"><span class="tag train-tag">✈️ 飞行 2.5h</span></div>
-    <div class="sec"><div class="t">🎯 行程</div><div class="c">🚕 丽江→三义机场（40 分钟）→ ✈️ 直飞广州（约 2.5h，南航/首航每天多班）→ 🏠 到家！</div></div>
-    <div class="note">✈️ 提前买票约 800-1200 元/人。三义机场不大，提前 1.5h 到即可。如果 D19 选了方案 B，今天要早起从香格里拉赶回丽江。</div>
+    <div class="sec"><div class="t">🎯 行程</div><div class="c">🚕 香格里拉→迪庆机场（20分钟，就在城边）→ 还车 → ✈️ 直飞广州（南航每周 4 班+东航每日 1 班，约 2.5h）→ 🏠 到家！</div></div>
+    <div class="note">✈️ 南航 2026.7.10 刚复航迪庆→广州，每周 4 班（约 12:20 出发）；东航每日 1 班（约 21:40 出发）。提前买约 1000-1600 元/人。迪庆机场很小，提前 1h 到就够，还车柜台就在航站楼旁。</div>
   </div>
 
 </div>
@@ -688,7 +677,6 @@ const drive = [
   [[27.660,100.780],[26.872,100.230],'泸沽湖→丽江'],
   [[26.872,100.230],[27.220,100.130],'丽江→虎跳峡'],
   [[27.220,100.130],[27.830,99.700],'虎跳峡→香格里拉'],
-  [[27.830,99.700],[26.872,100.230],'香格里拉→丽江'],
 ];
 
 drive.forEach(d => {
@@ -709,9 +697,9 @@ trains.forEach(t => {
 });
 
 // Flight
-L.polyline([[26.872,100.230],[23.129,113.264]], {
+L.polyline([[27.830,99.700],[23.129,113.264]], {
   color: '#22c55e', weight: 2, opacity: 0.5, smoothFactor: 1, dashArray: '4,10',
-}).addTo(map).bindPopup('<strong>丽江→广州 ✈️</strong>');
+}).addTo(map).bindPopup('<strong>迪庆香格里拉→广州 ✈️</strong>');
 
 // Stops
 const stops = [
