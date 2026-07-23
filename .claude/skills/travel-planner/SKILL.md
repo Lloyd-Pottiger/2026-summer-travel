@@ -5,8 +5,6 @@ description: Plan a multi-day road trip or domestic travel itinerary.
 
 # Travel Planner Skill
 
-TRIGGER — invoke this skill whenever: the user types `/travel-planner`, `$travel-planner`, or asks to plan a trip, design a route, create a travel itinerary, or build a trip handbook. Also invoke when the user says "plan a trip to X", "design a road trip", or similar travel-planning requests.
-
 ## Pitfalls to Avoid
 
 - **Don't overwrite existing trip plans.** Always check if `index.html` or other HTML files already exist in the project. Save new plans with descriptive filenames (see Phase 4 naming convention). The user may have multiple trips in the same project.
