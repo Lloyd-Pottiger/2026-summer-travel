@@ -134,20 +134,22 @@ Pre-flight checks:
 - Run `gh auth status` to verify GitHub CLI is authenticated; if not, guide the user through `gh auth login` first
 - Run `git --version` to verify git is available
 
-GitHub Pages can serve multiple HTML files — `index.html` is only special because it's the root default page. There's no need to rename trip files or create a new repo per trip. Strategy:
+**Safety rules:**
+- **Never touch an existing repo without the user's explicit permission.** Many repos (especially `<user>.github.io`) are private or contain personal sites — modifying them without asking is destructive.
+- **Private repos can't serve public GitHub Pages** (requires GitHub paid plan). Always create a new **public** repo for trip deployment, or ask the user which existing public repo to use.
+- **Create a dedicated repo.** Use `gh repo create <name> --public` to create a new public repo specifically for trip plans. Suggested naming: `travel-plans` or `trips`.
 
-**First deployment (new repo):**
-- Create a single GitHub repo for all trips (e.g., `trips` or `travel-plans`)
-- Generate a lightweight `index.html` as a landing page that lists all trip plans with links
+**Deployment flow (new public repo):**
+- `gh repo create trips --public --clone`
 - Copy all trip HTML files into the repo, keeping their descriptive filenames
-- `git init && git add -A && git commit -m "Initial deploy"`
-- Push and enable GitHub Pages (branch: `main`, path: `/`)
-- Trip URLs: `https://<user>.github.io/<repo>/western-sichuan-oct-2026.html`
+- Generate an `index.html` landing page that lists all trips with links
+- `git add -A && git commit -m "Add trip plans" && git push`
+- Enable GitHub Pages: `gh api -X POST /repos/<user>/trips/pages -f source.branch=main -f source.path=/`
+- Trip URLs: `https://<user>.github.io/trips/western-sichuan-oct-2026.html`
 
-**Adding a trip to an existing deployment:**
-- Copy the new trip HTML into the existing deployment repo (descriptive filename preserved)
-- Update the landing page `index.html` to include the new trip in the list
-- Commit and push
+**Adding more trips later:**
+- Clone the deployment repo, add new trip HTML, update landing page `index.html`, push
+- No need to rename anything or create new repos
 
 **Landing page `index.html`:**
 - Simple, styled list of all trips with title, dates, route summary, and link to each
