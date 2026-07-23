@@ -134,14 +134,25 @@ Pre-flight checks:
 - Run `gh auth status` to verify GitHub CLI is authenticated; if not, guide the user through `gh auth login` first
 - Run `git --version` to verify git is available
 
-If the user confirms:
-- Create a new repository on GitHub (via `gh repo create` or manual)
-- Copy the trip HTML file into the repo as `index.html` (required for GitHub Pages root)
-- `git init && git add index.html && git commit -m "Initial deploy"`
-- Push to the new repository
-- Enable GitHub Pages from the repo settings (branch: `main`, path: `/`)
-- Site will be live at `https://<user>.github.io/<repo>/` within ~30 seconds
-- Note: the original descriptive filename stays in the project; only the deployment copy is renamed to `index.html`
+GitHub Pages can serve multiple HTML files — `index.html` is only special because it's the root default page. There's no need to rename trip files or create a new repo per trip. Strategy:
+
+**First deployment (new repo):**
+- Create a single GitHub repo for all trips (e.g., `trips` or `travel-plans`)
+- Generate a lightweight `index.html` as a landing page that lists all trip plans with links
+- Copy all trip HTML files into the repo, keeping their descriptive filenames
+- `git init && git add -A && git commit -m "Initial deploy"`
+- Push and enable GitHub Pages (branch: `main`, path: `/`)
+- Trip URLs: `https://<user>.github.io/<repo>/western-sichuan-oct-2026.html`
+
+**Adding a trip to an existing deployment:**
+- Copy the new trip HTML into the existing deployment repo (descriptive filename preserved)
+- Update the landing page `index.html` to include the new trip in the list
+- Commit and push
+
+**Landing page `index.html`:**
+- Simple, styled list of all trips with title, dates, route summary, and link to each
+- Match the visual style of the trip handbooks (same fonts, dot-grid background)
+- Sorted by date, most recent first
 
 ## Reference Data
 
