@@ -42,6 +42,28 @@ Three possible states:
 
 If `xhs` is not installed at all, tell the user and fall back to WebSearch. Don't block on it.
 
+## Troubleshooting
+
+### `FileNotFoundError: .../scripts` on login or search
+
+This is a known packaging bug in redbook-cli v0.2.0 — the CDP scripts (Chrome automation) are missing from the PyPI package. Fix:
+
+```bash
+git clone https://github.com/Youhai020616/xiaohongshu.git /tmp/xiaohongshu
+ln -sf /tmp/xiaohongshu/scripts /opt/homebrew/lib/python3.10/scripts
+```
+
+Then retry the failed command. This only needs to be done once per machine.
+
+### Chrome doesn't open on `xhs login --cdp`
+
+Make sure Chrome is installed and no existing Chrome instance is blocking port 9222. Kill any lingering Chrome processes first:
+
+```bash
+pkill -f "chrome.*remote-debugging-port" 2>/dev/null
+xhs login --cdp
+```
+
 ## Search
 
 ```bash

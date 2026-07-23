@@ -27,12 +27,17 @@ Use `AskUserQuestion` to batch questions. Key dimensions to pin down (adapt orde
 
 ### Phase 2: Route Design
 
-**Before designing the route, check for Xiaohongshu access:**
+**Step 0 — Check for Xiaohongshu access (MANDATORY, do not skip):**
 
-Run `which xhs && xhs status`. Two outcomes:
+Run `which xhs 2>/dev/null && xhs status 2>&1 || echo "XHS_NOT_INSTALLED"`.
 
-- **xhs is installed and logged in** → use `/xhs-search` throughout Phase 2 to validate routes, find accommodations, discover restaurants, and check seasonal conditions with real traveler experiences.
-- **xhs is not installed** → use `AskUserQuestion` to ask: "装个 redbook-cli 可以搜小红书真实攻略（路线避坑、住宿推荐、餐厅测评），要装吗？" If yes, guide them through `pip install redbook-cli && xhs init && xhs login --cdp`, then use `/xhs-search` in Phase 2. If no, proceed without it.
+- **If xhs is not installed** → STOP. Do not proceed to route design yet. Ask the user whether they want to install it (mention it helps find real traveler tips, route pitfalls, food recs). If yes:
+  1. Run `pip install redbook-cli` yourself.
+  2. If `xhs login --cdp` fails with `FileNotFoundError: .../scripts`, apply the fix from `/xhs-search` troubleshooting (clone repo + symlink scripts), then retry.
+  3. Tell the user to run `xhs init` (press Enter at proxy prompt) then `xhs login --cdp` — the QR scan needs their phone.
+  4. Once they confirm login is done, proceed with `/xhs-search` available.
+  If the user says no, proceed without it.
+- **If xhs is installed and logged in** → use `/xhs-search` throughout Phase 2.
 
 **Universal principles:**
 1. Minimize backtracking — the route should flow in one general direction
